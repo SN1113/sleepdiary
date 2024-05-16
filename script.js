@@ -39,3 +39,22 @@ document.getElementById('downloadCSV').addEventListener('click', () => {
         return;
     }
     let records = getStoredRecords(username);
+    if (records.length === 0) {
+        alert('No records to download.');
+        return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Type,Time\n";
+    records.forEach(record => {
+        csvContent += `${record.type},${record.time}\n`;
+    });
+
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${username}_wakeup_bedtime_records.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
